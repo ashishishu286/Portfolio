@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ashish's Portfolio</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Orbitron:wght@700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0d11; /* More darker background */
+            color: #e2e8f0;
+            background-attachment: fixed;
+            background-position: center;
+            will-change: background-image;
+            transition: background-image 0.3s ease-out;
+            
+            /* Initial background gradient based on light source position */
+            background-image: radial-gradient(at 10% 20%, #291a0f 0%, #0c0d11 60%);
+        }
+
+        /* Pulsing glow for buttons and borders */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.4), 0 0 20px rgba(251, 191, 36, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.7), 0 0 30px rgba(251, 191, 36, 0.4); }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* Project card hover effect */
+        .project-card:hover {
+            border-color: #fbbf24;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Section fade-in animation on scroll */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Styles for the dynamic light source */
+        .light-source {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background-image: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(251, 191, 36, 0.2) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+            will-change: transform, opacity;
+            transition: all 0.3s ease-out;
+            opacity: 1; /* Made visible */
+        }
+
+        /* Dynamic text gradient using CSS variables */
+        .dynamic-gradient-text {
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, var(--text-color-from), var(--text-color-to));
+            transition: all 0.3s ease-out;
+        }
+
+        /* Add some content to make scrolling possible */
+        .content-section {
+            min-height: 100vh;
+            padding: 4rem 0;
+        }
+
+        #idea-output-container {
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .loading-animation {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-left-color: #fcd34d;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* New overlay for the tint effect */
+        .tint-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 204, 0.1); /* Adjusted opacity for a more noticeable tint */
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Tint Overlay -->
+    <div class="tint-overlay"></div>
+
+    <!-- Header & Hero Section -->
+    <header class="relative overflow-hidden">
+        <!-- Dynamic Light Source -->
+        <div id="light-source" class="light-source"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-white text-center">
+            <!-- Navigation -->
+            <nav class="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-10">
+                <div id="nav-title" class="text-3xl font-bold tracking-widest font-['Orbitron'] dynamic-gradient-text" style="--text-color-from: #fcd34d; --text-color-to: #f59e0b;">
+                    Ashish
+                </div>
+                <div class="space-x-8 font-medium hidden md:block">
+                    <a href="#about" class="text-gray-300 hover:text-yellow-400 transition-colors">About</a>
+                    <a href="#skills" class="text-gray-300 hover:text-yellow-400 transition-colors">Skills</a>
+                    <a href="#projects" class="text-gray-300 hover:text-yellow-400 transition-colors">Projects</a>
+                    <a href="#contact" class="text-gray-300 hover:text-yellow-400 transition-colors">Contact</a>
+                </div>
+            </nav>
+
+            <!-- Hero Content -->
+            <div class="mt-20 space-y-8">
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight dynamic-gradient-text" style="--text-color-from: #fcd34d; --text-color-to: #f59e0b;">
+                    Hello World
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    I'm an aspiring software developer
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mt-12">
+                    <a href="#contact" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300 pulse-glow">
+                        Get In Touch
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about" class="content-section fade-in-section bg-gray-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-16 dynamic-gradient-text" style="--text-color-from: #fcd34d; --text-color-to: #f59e0b;">
+                About Me
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        I am a passionate aspiring software developer with a strong foundation in Java, HTML, and CSS. I enjoy building things from the ground up, focusing on creating functional and well-designed digital experiences.
+                    </p>
+                    <p class="text-lg text-gray-300 leading-relaxed">
+                        When I'm not coding, I'm often learning new design principles or brainstorming my next project. I'm actively seeking opportunities to apply my skills and grow as a developer.
+                    </p>
+                </div>
+                <div class="text-center">
+                    <img src="profile.png" alt="Ashish's profile picture" class="w-64 h-64 mx-auto rounded-full object-cover border-4 border-yellow-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="content-section fade-in-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-16 dynamic-gradient-text" style="--text-color-from: #fcd34d; --text-color-to: #f59e0b;">
+                Skills
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-yellow-500 transition-all duration-300">
+                    <div class="text-4xl mb-4">☕</div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Java</h3>
+                    <p class="text-gray-300">Data Structures and Algorithms</p>
+                </div>
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-yellow-500 transition-all duration-300">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Frontend</h3>
+                    <p class="text-gray-300">HTML, CSS</p>
+                </div>
+                <div class="bg-gray-800/50 p-8 rounded-xl border border-gray-700 hover:border-yellow-500 transition-all duration-300">
+                    <div class="text-4xl mb-4">🖌️</div>
+                    <h3 class="text-2xl font-bold mb-4 text-yellow-400">Designing</h3>
+                    <p class="text-gray-300">Basic</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="content-section fade-in-section bg-gray-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold text-center mb-16 dynamic-gradient-text" style="--text-color-from: #fcd34d; --text-color-to: #f59e0b;">
+                Projects
+            </h2>
+            <div id="idea-output-container">
+                <p id="idea-text" class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto leading-relaxed">
+                    I'm currently working on some ideas.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="content-section fade-in-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-16 dynamic-gradient-text" style="--text-color-from: #fcd34d; --text-color-to: #f59e0b;">
+                Get In Touch
+            </h2>
+            <p class="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
+                Ready to bring your ideas to life? Let's work together to create something amazing.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <!-- GitHub Button -->
+                <a href="https://github.com/ashishishu286" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300">
+                    GitHub
+                </a>
+                <!-- LinkedIn Button -->
+                <a href="https://www.linkedin.com/in/ashish-8568b93431/" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300">
+                    LinkedIn
+                </a>
+                <!-- Gmail Button -->
+                <a href="mailto:ashishishu286@gmail.com" class="bg-yellow-500 hover:bg-yellow-600 text-black font-semibold py-4 px-8 rounded-lg transition-all duration-300">
+                    Gmail
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Custom light movement based on cursor position
+        function updateLightPosition(e) {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Update light source position
+            const lightSource = document.getElementById('light-source');
+            if (lightSource) {
+                lightSource.style.left = x + 'px';
+                lightSource.style.top = y + 'px';
+            }
+
+            // Update background gradient based on light position
+            const gradientX = (x / window.innerWidth) * 100;
+            const gradientY = (y / window.innerHeight) * 100;
+            
+            const hue = (x / window.innerWidth) * 360; // Change color based on horizontal position
+            const lightColor = `hsl(${hue}, 80%, 60%)`;
+            const darkColor = '#0c0d11';
+            
+            document.body.style.backgroundImage = `radial-gradient(at ${gradientX}% ${gradientY}%, ${lightColor}40 0%, ${darkColor} 60%)`;
+            
+            // Update text gradients
+            const textElements = document.querySelectorAll('.dynamic-gradient-text');
+            const color1 = `hsl(${hue}, 80%, 60%)`;
+            const color2 = `hsl(${(hue + 60) % 360}, 80%, 50%)`;
+            
+            textElements.forEach(element => {
+                element.style.setProperty('--text-color-from', color1);
+                element.style.setProperty('--text-color-to', color2);
+            });
+        }
+
+        // Fade in sections on scroll
+        function handleScrollAnimations() {
+            const sections = document.querySelectorAll('.fade-in-section');
+            const windowHeight = window.innerHeight;
+            
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < windowHeight * 0.8) {
+                    section.classList.add('is-visible');
+                }
+            });
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Initialize and add event listeners
+        window.addEventListener('mousemove', updateLightPosition);
+        window.addEventListener('scroll', handleScrollAnimations);
+        window.addEventListener('load', handleScrollAnimations);
+    </script>
+</body>
+</html>
